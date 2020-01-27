@@ -26,4 +26,9 @@ Fraction add ( Fraction a, Fraction b );
  */
 Fraction multiply ( Fraction a, Fraction b );
 
+/*! Reduces the fraction passed
+ *  \param a The fraction being reduced
+ */
+Fraction reduce ( Fraction a );
+
 #endif
