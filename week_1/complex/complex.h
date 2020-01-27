@@ -3,11 +3,11 @@
 
 /*! @file */
 
-/*! \breif Fraction object and method definitions
+/*! \breif Complex number object and method definitions
  *
- *  A fraction object is a struct with a numerator, denoted num, and
- *  a denominator, denoted den. Varions Methods that take fractions and return 
- *  fractions do arithmetical operations on them.
+ *  A Complex number object is a struct with a real, denoted real, and
+ *  a image, denoted im. Varions Methods that take complex numbers and return 
+ *  complex numbers do arithmetical operations on them.
  */
 typedef struct {
     double real;
