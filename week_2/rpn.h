@@ -77,4 +77,11 @@ Point negate(Point p);
 
 void rpn_divide();
 
+/*! Returns the size in bytes of the rpn's stack
+ *
+ */
+int rpn_size();
+
+static void resize();
+
 #endif

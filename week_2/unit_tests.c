@@ -56,24 +56,23 @@ namespace {
     TEST(HW2,ReverseInPlace_EvenLength) {
         int x[] = {10,20,30,40};
         reverse_in_place(x,4);
-        ASSERT_EQ(x[1],40);       
-        ASSERT_EQ(x[2],30);   
-        ASSERT_EQ(x[3],20);   
-        ASSERT_EQ(x[4],10);                            
+        ASSERT_EQ(x[0],40);       
+        ASSERT_EQ(x[1],30);   
+        ASSERT_EQ(x[2],20);   
+        ASSERT_EQ(x[3],10);                            
     }
 
-
-    // This test is not working. There is a syntax issue with the second line
-    // TEST(HW2,PointMap) {
-    //   Point a[] = { { 1,2,3 }, { 2,3,4 } };
-    //   Point * b = map(a,2,negate);
-    //   for(int i=0; i<2; i++) {
-    //     ASSERT_EQ(b[i].x,-a[i].x);
-    //     ASSERT_EQ(b[i].y,-a[i].y);
-    //     ASSERT_EQ(b[i].z,-a[i].z);
-    //   }
-    //   free(b);
-    // }  
+    TEST(HW2, RPN_Resize) {
+        rpn_init();
+        int currSize = rpn_size();
+        for (int i = 0; i < 110; i++) {
+            rpn_push(i);
+        }
+        for (int i = 0; i < 110; i++) {
+            ASSERT_EQ(rpn_pop(), 110 -1 -i);
+        }
+        int finalSize = rpn_size();
+    } 
 
     TEST(HW2,RPN_Divide) {
         rpn_init();
@@ -111,6 +110,8 @@ namespace {
         ASSERT_EQ(rpn_pop(), -DBL_MAX);
         rpn_free();
     }
+
+
 
     TEST(HW2,RPN_BASICS) {
         rpn_init();

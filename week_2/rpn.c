@@ -13,6 +13,7 @@ static int initialized = 0;
 static int top = 0;
 static RPN_ERROR error = OK;
 
+static int CURR_STACK_SIZE = INITIAL_STACK_SIZE;
 static int running_total_value = 0;
 
 int running_total(int x) {
@@ -31,18 +32,17 @@ void reset_total() {
 }
 
 void reverse_in_place(int * a, int l) {
-    int * tmp = 0;
-    for (int i = 0; i < (l - 1) /2; i++) {
-        *tmp = a[i];
+    int tmp = 0;
+    for (int i = 0; i < (l) /2; i++) {
+        tmp = a[i];
         a[i] = a[l-1-i];
-        a[l-1-i] = *tmp;
+        a[l-1-i] = tmp;
     }
 }
 
 int * reverse(int * a, int l) {
     int * new_a = (int *) calloc(l,sizeof(int));
     for (int i = 0; i < l; i++) {
-        printf("a[%d] = %d\n", l-i-1, a[l-i-1]);
         new_a[i] = a[l-i-1];
     }
     return new_a;
@@ -75,24 +75,26 @@ Point * map(Point * a, int l, Point (*fxn) (Point)) {
 void rpn_divide() {
     if (!initialized) {
         error = NOT_INITIALIZED_ERROR;
-    } else if ( top < 2 ) {
+    } else if ( top <= 1 ) {
         error = BINARY_ERROR;
-    } else if (stack[top] == 0) {
-        error = DIVIDE_BY_ZERO_ERROR;
     } else {
-        double check = stack[top - 1] / stack[top];
+        double v1 = rpn_pop();
+        double v2 = rpn_pop();
+        double check = v2 / v1;
         //check for overflow error
-        if (check * stack[top] != stack[top - 1]) {
+        if (v1 == 0) {
+            error = DIVIDE_BY_ZERO_ERROR;
+        } else if (check * v1 > v2 + 1 || check * v1 < v2 - 1) {
             //overflow routine
-            if ( stack[top - 1] > 0 && stack[top] > 0 ||
-                stack[top - 1] < 0 && stack[top] < 0) {
+            if ( v1 > 0 && v2 > 0 ||
+                v1 < 0 && v2 < 0) {
                 check = DBL_MAX;
             } else {
-                check = DBL_MIN;
+                
+                check = -DBL_MAX;
             }
         } 
-        top--;
-        stack[top-1] = check;
+        rpn_push(check);
     }
 }
 
@@ -117,9 +119,32 @@ void rpn_push(double x) {
     if ( !initialized ) {
         error = NOT_INITIALIZED_ERROR;
     } else {
+        if (top == CURR_STACK_SIZE - 1) {
+            resize();
+        }
         stack[top] = x;
         top++;
     }
+}
+
+static void resize() {
+    //need to build a new stack
+    double * new_stack = (double *) malloc(CURR_STACK_SIZE*2*2*sizeof(double)); 
+    //need to copy everything to the new stack
+    for (int i = 0; i < CURR_STACK_SIZE*2; i++) {
+        if (i < CURR_STACK_SIZE) {
+            new_stack[i] = stack[i];
+        } else {
+            new_stack[i] = 0;
+        }
+    }
+    //potential memory leak here
+    stack = new_stack;
+    CURR_STACK_SIZE = 2*CURR_STACK_SIZE;
+}
+
+int rpn_size() {
+    return CURR_STACK_SIZE * sizeof(double);
 }
 
 void rpn_add() {  
