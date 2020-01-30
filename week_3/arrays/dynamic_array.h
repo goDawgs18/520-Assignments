@@ -88,9 +88,17 @@ int DynamicArray_destroy_all();
 
 DynamicArray * DynamicArray_subarray(DynamicArray *, int, int);
 
+/*! Implements Bubble sort on the contents of a Dynamic Array
+ */
 DynamicArray * DynamicArray_sort ( DynamicArray * b );
-void DynamicArray_add_on ( DynamicArray * a, DynamicArray * b );
 
+/*! 'Adds on' the first array onto the second array
+ */
+void DynamicArray_add_on ( const DynamicArray * a, DynamicArray * b );
+
+/*! Takes the first n elements of the array and returns it in a new array
+ *  If negative it will take from the back and will take from the front if 
+ *  positive. Will also zero extend if the n is larger than the size of a.
+ */
 DynamicArray * DynamicArray_take ( DynamicArray * a, int n );
-// DynamicArray * DynamicArray_sort( DynamicArray * da )
 #endif
