@@ -68,6 +68,89 @@ namespace {
         }
         ASSERT_EQ(DynamicArray_sum(da), 15.0);
     }
+
+    TEST(DynamicArray,Range_pos) {
+        DynamicArray * da = DynamicArray_range(1.0, 5.0, 1.0);
+        char * str = DynamicArray_to_string(da);
+        printf("ToString Example: %s\n", str);
+        ASSERT_STREQ(
+            str,
+            "[1.00000,2.00000,3.00000,4.00000,5.00000]"
+        );
+        DynamicArray_destroy(da);
+        free(str);
+    }
+
+    TEST(DynamicArray,Range_neg) {
+        DynamicArray * da = DynamicArray_range(5.0, 1.0, -1.0);
+        char * str = DynamicArray_to_string(da);
+        printf("ToString Example: %s\n", str);
+        ASSERT_STREQ(
+            str,
+            "[5.00000,4.00000,3.00000,2.00000,1.00000]"
+        );
+        DynamicArray_destroy(da);
+        free(str);
+    }
+
+    TEST(DynamicArray,concat) {
+        DynamicArray * d = DynamicArray_range(5.0, 4.0, -1.0);
+        DynamicArray * a = DynamicArray_range(3.0, 1.0, -1.0);
+        DynamicArray * da = DynamicArray_concat(d, a);
+        char * str = DynamicArray_to_string(da);
+        printf("ToString Example: %s\n", str);
+        ASSERT_STREQ(
+            str,
+            "[5.00000,4.00000,3.00000,2.00000,1.00000]"
+        );
+        DynamicArray_destroy(a);
+        DynamicArray_destroy(d);
+        DynamicArray_destroy(da);
+        free(str);
+    }
+
+    TEST(DynamicArray,take_short) {
+        DynamicArray * a = DynamicArray_range(1, 5, 1);
+        DynamicArray * d = DynamicArray_take(a, 2);
+        char * str = DynamicArray_to_string(d);
+        printf("ToString Example: %s\n", str);
+        ASSERT_STREQ(
+            str,
+            "[1.00000,2.00000]"
+        );
+        DynamicArray_destroy(a);
+        DynamicArray_destroy(d);
+        free(str);
+    }
+
+    TEST(DynamicArray,take_zero) {
+        DynamicArray * a = DynamicArray_range(1, 2, 1);
+        DynamicArray * d = DynamicArray_take(a, 5);
+        char * str = DynamicArray_to_string(d);
+        printf("ToString Example: %s\n", str);
+        ASSERT_STREQ(
+            str,
+            "[1.00000,2.00000,0,0,0]"
+        );
+        DynamicArray_destroy(a);
+        DynamicArray_destroy(d);
+        free(str);
+    }
+
+    TEST(DynamicArray,take_negzero) {
+        DynamicArray * a = DynamicArray_range(1, 2, 1);
+        DynamicArray * d = DynamicArray_take(a, -5);
+        char * str = DynamicArray_to_string(d);
+        printf("ToString Example: %s\n", str);
+        ASSERT_STREQ(
+            str,
+            "[1.00000,2.00000,0,0,0]"
+        );
+        DynamicArray_destroy(a);
+        DynamicArray_destroy(d);
+        free(str);
+    }
+
 //////////////////////////////
     TEST(DynamicArray, CreateAndDestroy) {
         DynamicArray * a = DynamicArray_new();

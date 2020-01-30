@@ -153,25 +153,35 @@ void DynamicArray_push_front(DynamicArray * da, double value) {
 }
 
 double DynamicArray_pop(DynamicArray * da) {
-    assert(DynamicArray_size(da) > 0);
-    double value = DynamicArray_get(da, DynamicArray_size(da)-1);
+    double value = DynamicArray_last(da);
     DynamicArray_set(da, DynamicArray_size(da)-1, 0.0);
     da->end--;
     return value;
 }
 
 double DynamicArray_pop_front(DynamicArray * da) {
-    assert(DynamicArray_size(da) > 0);
-    double value = DynamicArray_get(da, 0);
+    double value = DynamicArray_first(da);
     da->origin++;
     return value;    
 }
 
+double DynamicArray_first ( const DynamicArray * da ) {
+    assert(DynamicArray_size(da) > 0);
+    double value = DynamicArray_get(da, 0);
+    return value; 
+}
+
+double DynamicArray_last ( const DynamicArray * da ) {
+    assert(DynamicArray_size(da) > 0);
+    double value = DynamicArray_get(da, DynamicArray_size(da)-1);
+    return value; 
+}
+
 DynamicArray * DynamicArray_map(const DynamicArray * da, double (*f) (double)) {
     assert(da->buffer != NULL);
-    DynamicArray * result = DynamicArray_new();
+    DynamicArray * result = DynamicArray_copy(da);
     for ( int i=0; i<DynamicArray_size(da); i++ ) {
-        DynamicArray_set(result, i, f(DynamicArray_get(da, i)));
+        DynamicArray_set(result, i, f(DynamicArray_get(result, i)));
     }
     return result;
 }
@@ -222,11 +232,8 @@ double DynamicArray_mean ( const DynamicArray * da ) {
 
 double DynamicArray_median ( const DynamicArray * da ) {
     assert(DynamicArray_size(da) > 0);
-    DynamicArray * oth = DynamicArray_new();
+    DynamicArray * oth = DynamicArray_copy(da);
     int size = DynamicArray_size(da);
-    for (int i = 0; i < size; i++) {
-        DynamicArray_push(oth, DynamicArray_get(da, i));
-    }
     DynamicArray_sort(oth);
     if (size % 2 == 0) {
         double median = (DynamicArray_get(oth, size / 2 - 1) + 
@@ -236,12 +243,11 @@ double DynamicArray_median ( const DynamicArray * da ) {
     } else {
         double median = DynamicArray_get(oth, size/2); 
         DynamicArray_destroy(oth);
-        return median; 
+        return median;
     }
 }
 
 DynamicArray * DynamicArray_sort( DynamicArray * b ) {
-
     for (int i = 0; i < DynamicArray_size(b) - 1; i++) {
         if (DynamicArray_get(b, i) > DynamicArray_get(b, i + 1)) {
             for (int q = i; q < DynamicArray_size(b); q++) {
@@ -263,4 +269,67 @@ double DynamicArray_sum ( const DynamicArray * da ) {
         sum += DynamicArray_get(da, i);
     }
     return sum;
+}
+
+DynamicArray * DynamicArray_copy ( const DynamicArray * da ) {
+    DynamicArray * oth = DynamicArray_new();
+    int size = DynamicArray_size(da);
+    for (int i = 0; i < size; i++) {
+        DynamicArray_push(oth, DynamicArray_get(da, i));
+    }
+    return oth;
+}
+
+DynamicArray * DynamicArray_range ( double a, double b, double step) {
+    DynamicArray * g = DynamicArray_new();
+    double val = a;
+    if ( b < a && step < 0) {
+        while (val >= b) {
+            DynamicArray_push(g, val);
+            val += step;
+        }
+    } else {
+        while (val <= b) {
+            DynamicArray_push(g, val);
+            val += step;
+        }
+    }
+    return g;
+}
+
+void DynamicArray_add_on ( const DynamicArray * a,  DynamicArray * b ) {
+    for (int i = 0; i < DynamicArray_size(a); i++) {
+        DynamicArray_get(a, i);
+        DynamicArray_push(b, DynamicArray_get(a, i));
+    }
+}
+
+DynamicArray * DynamicArray_concat ( const DynamicArray * a, const DynamicArray * b ) {
+    DynamicArray * g = DynamicArray_new();
+    DynamicArray_add_on(a, g);
+    DynamicArray_add_on(b, g);
+    return g;
+}
+
+DynamicArray * DynamicArray_take ( DynamicArray * a, int n ) {
+    DynamicArray * da = DynamicArray_new();
+    if (n < 0) {
+        for (int i = 0; i < n * -1; i++) {
+            if (i < DynamicArray_size(a)) {
+                DynamicArray_push_front(da, DynamicArray_get(a, 
+                        DynamicArray_size(a) -1 - i));
+            } else {
+                DynamicArray_push(da, 0);
+            }
+        }
+    } else {
+        for (int i = 0; i < n; i++) {
+            if (i < DynamicArray_size(a)) {
+                DynamicArray_push(da, DynamicArray_get(a, i));
+            } else {
+                DynamicArray_push(da, 0);
+            }
+        }
+    }
+    return da;
 }
