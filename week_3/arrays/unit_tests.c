@@ -7,6 +7,68 @@
 
 namespace {
 
+    TEST(DynamicArray, min) {
+        DynamicArray * da = DynamicArray_new();
+        double x = 1.0;
+        while ( x <= 5 ) {
+            DynamicArray_push(da, x);  
+            x += 1.0;
+        }
+        ASSERT_EQ(DynamicArray_min(da), 1.0);
+        DynamicArray_push(da, -1.0);
+        ASSERT_EQ(DynamicArray_min(da), -1.0);
+    }
+
+    TEST(DynamicArray, max) {
+        DynamicArray * da = DynamicArray_new();
+        double x = -5.0;
+        while ( x <= 5 ) {
+            DynamicArray_push(da, x);  
+            x += 1.0;
+        }
+        ASSERT_EQ(DynamicArray_max(da), 5.0);
+    }
+
+    TEST(DynamicArray, mean) {
+        DynamicArray * da = DynamicArray_new();
+        double x = 1.0;
+        while ( x <= 5 ) {
+            DynamicArray_push(da, x);  
+            x += 1.0;
+        }
+        ASSERT_EQ(DynamicArray_mean(da), 3.0);
+    }
+
+    TEST(DynamicArray, median) {
+        DynamicArray * da = DynamicArray_new();
+        double x = 1.0;
+        while ( x <= 5 ) {
+            DynamicArray_push(da, x);  
+            x += 1.0;
+        }
+        ASSERT_EQ(DynamicArray_median(da), 3.0);
+    }
+
+    TEST(DynamicArray, median_even) {
+        DynamicArray * da = DynamicArray_new();
+        double x = 1.0;
+        while ( x <= 4 ) {
+            DynamicArray_push(da, x);  
+            x += 1.0;
+        }
+        ASSERT_EQ(DynamicArray_median(da), 2.5);
+    }
+
+    TEST(DynamicArray, sum) {
+        DynamicArray * da = DynamicArray_new();
+        double x = 1.0;
+        while ( x <= 5 ) {
+            DynamicArray_push(da, x);  
+            x += 1.0;
+        }
+        ASSERT_EQ(DynamicArray_sum(da), 15.0);
+    }
+//////////////////////////////
     TEST(DynamicArray, CreateAndDestroy) {
         DynamicArray * a = DynamicArray_new();
         DynamicArray_destroy(a);

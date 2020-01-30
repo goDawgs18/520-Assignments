@@ -88,4 +88,6 @@ int DynamicArray_destroy_all();
 
 DynamicArray * DynamicArray_subarray(DynamicArray *, int, int);
 
+DynamicArray * DynamicArray_sort ( DynamicArray * b );
+// DynamicArray * DynamicArray_sort( DynamicArray * da )
 #endif
