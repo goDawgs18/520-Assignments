@@ -2,7 +2,7 @@
 #include <float.h> /* defines DBL_EPSILON */
 #include <assert.h>
 #include "typed_array.h"
-#include "mpoint.h"
+#include "complex.h"
 #include "gtest/gtest.h"
 
 namespace {
@@ -11,22 +11,22 @@ namespace {
 //           These are  tests for the TypedArray data type              // 
 //**********************************************************************//
 
-    TEST(TypedArray, Construction) {
-        TypedArray<Point> b;
-        b.set(0, Point(1,2,3));
-        b.set(1, Point(2,3,4));
-        b.set(20, Point(3,4,5));
-        EXPECT_EQ(b.get(0).x, 1);
-        EXPECT_EQ(b.get(1).y, 3);
-        EXPECT_EQ(b.get(20).z, 5);
-    }
+    // TEST(TypedArray, Construction) {
+    //     TypedArray<Point> b;
+    //     b.set(0, Point(1,2,3));
+    //     b.set(1, Point(2,3,4));
+    //     b.set(20, Point(3,4,5));
+    //     EXPECT_EQ(b.get(0).x, 1);
+    //     EXPECT_EQ(b.get(1).y, 3);
+    //     EXPECT_EQ(b.get(20).z, 5);
+    // }
 
-    TEST(TypedArray, Defaults) {
-        TypedArray<Point> x;
-        Point& y = x.get(3);
-        std::cout << x << "\n";
-        EXPECT_DOUBLE_EQ(y.magnitude(), 0.0);
-    }
+    // TEST(TypedArray, Defaults) {
+    //     TypedArray<Point> x;
+    //     Point& y = x.get(3);
+    //     std::cout << x << "\n";
+    //     EXPECT_DOUBLE_EQ(y.magnitude(), 0.0);
+    // }
 
     TEST(TypedArray, Matrix) {
 
@@ -48,13 +48,13 @@ namespace {
 
     }
 
-    TEST(TypedArray,CopyElementsInSet1) {
-        TypedArray<Point> b;
-        Point p(1,2,3);
-        b.set(0, p);
-        p.x = 4;
-        EXPECT_DOUBLE_EQ(b.get(0).x, 1);
-    }
+    // TEST(TypedArray,CopyElementsInSet1) {
+    //     TypedArray<Point> b;
+    //     Point p(1,2,3);
+    //     b.set(0, p);
+    //     p.x = 4;
+    //     EXPECT_DOUBLE_EQ(b.get(0).x, 1);
+    // }
 
     TEST(TypedArray,CopyElementsInSet2) {
         TypedArray<TypedArray<double>> m;
@@ -71,6 +71,13 @@ namespace {
 //**********************************************************************//
 //           These are  tests for the Complex data type                 // 
 //**********************************************************************//
+    
+    TEST(Complex,re_im) {
+        Complex x(1,2);
+        EXPECT_EQ(x.re(), 1);
+        EXPECT_EQ(x.im(), 2);
+    }
+
     TEST(Examples,Complex) {
         Complex x(1,2), y(3);
     }

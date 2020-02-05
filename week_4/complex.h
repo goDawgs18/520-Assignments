@@ -5,13 +5,17 @@
 
 class Complex {
     public:
-    Complex(double x, double y) : re(x), im(y) {}
-    Complex(double a) : re(a), im(0) {};
+    Complex(double x, double y) : rl(x), img(y) {}
+    Complex(double a) : rl(a), img(0) {};
 
     double magnitude() const;
 
+    double re() const;
+
+    double im() const;
+    
     private:
-    double re, im;
+    double rl, img;
 }; 
 
 bool operator<(const Complex& a, const Complex& b);

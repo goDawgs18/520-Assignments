@@ -3,8 +3,15 @@
 
 double Complex::magnitude() const {
 
-    return sqrt(re*re + im*im);
+    return sqrt(rl*rl + img*img);
 
+}
+double Complex::re() const {
+    return this->rl;
+}
+
+double Complex::im() const {
+    return this->img;
 }
 
 bool operator<(const Complex& a, const Complex& b) {
