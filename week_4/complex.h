@@ -13,11 +13,19 @@ class Complex {
     double re() const;
 
     double im() const;
+
+    Complex conjugate() const;
     
     private:
     double rl, img;
 }; 
 
+//Operations
+Complex operator*(const Complex& a, const Complex& b);
+Complex operator+(const Complex& a, const Complex& b);
+
+//Logical
 bool operator<(const Complex& a, const Complex& b);
+bool operator==(const Complex& a, const Complex& b);
 
 #endif

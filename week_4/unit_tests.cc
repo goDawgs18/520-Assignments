@@ -78,8 +78,28 @@ namespace {
         EXPECT_EQ(x.im(), 2);
     }
 
-    TEST(Examples,Complex) {
+    TEST(Complex,add) {
         Complex x(1,2), y(3);
+        Complex c = x + y;
+        EXPECT_EQ(c.re(), 4);
+        EXPECT_EQ(c.im(), 2);
+    }
+
+    TEST(Complex,mult) {
+        Complex x(1,2), y(3);
+        Complex c = x * y;
+        EXPECT_EQ(c.re(), 3);
+        EXPECT_EQ(c.im(), 6);
+    }
+
+    TEST(Complex,conjugate) {
+        Complex x(1,2), y(3);
+        Complex a = x.conjugate();
+        Complex b = y.conjugate();
+        EXPECT_EQ(a.re(), 1);
+        EXPECT_EQ(a.im(), -2);
+        EXPECT_EQ(b.re(), 3);
+        EXPECT_EQ(b.im(), 0);
     }
 
     template<typename T>
