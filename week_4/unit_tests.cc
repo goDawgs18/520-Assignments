@@ -3,6 +3,7 @@
 #include <assert.h>
 #include "typed_array.h"
 #include "complex.h"
+#include "point.h"
 #include "gtest/gtest.h"
 
 namespace {
@@ -11,22 +12,115 @@ namespace {
 //           These are  tests for the TypedArray data type              // 
 //**********************************************************************//
 
-    // TEST(TypedArray, Construction) {
+    TEST(TypedArray, Construction) {
+        TypedArray<Point> b;
+        b.set(0, Point(1,2,3));
+        b.set(1, Point(2,3,4));
+        b.set(20, Point(3,4,5));
+        EXPECT_EQ(b.get(0).x, 1);
+        EXPECT_EQ(b.get(1).y, 3);
+        EXPECT_EQ(b.get(20).z, 5);
+    }
+    
+    TEST(TypedArray, PushAndPop_Normal) {
+        TypedArray<Point> b;
+        b.push(Point(1,2,3));
+        b.push(Point(2,3,4));
+        b.push(Point(3,4,5));
+        std::cout << b << "\n"; 
+        EXPECT_EQ(b.pop().x, 3);
+        EXPECT_EQ(b.pop().x, 2);
+        EXPECT_EQ(b.pop().x, 1);
+        std::cout << b << "\n"; 
+    }
+
+    TEST(TypedArray, PushFrontAndPopFront_Normal) {
+        TypedArray<Point> b;
+        b.push_front(Point(1,2,3));
+        b.push_front(Point(2,3,4));
+        b.push_front(Point(3,4,5));
+        std::cout << b << "\n"; 
+        EXPECT_EQ(b.pop_front().x, 3);
+        EXPECT_EQ(b.pop_front().x, 2);
+        EXPECT_EQ(b.pop_front().x, 1);
+    }
+
+    TEST(TypedArray, MixedMethods_Normal) {
+        TypedArray<Point> b;
+        b.push_front(Point(1,2,3));
+        b.push_front(Point(2,3,4));
+        b.push(Point(3,4,5));
+        std::cout << b << "\n"; 
+        EXPECT_EQ(b.pop_front().x, 2);
+        EXPECT_EQ(b.pop().x, 3);
+        EXPECT_EQ(b.pop_front().x, 1);
+        std::cout << b << "\n"; 
+    }
+
+    TEST(TypedArray, Pop_Empty) {
+        TypedArray<Point> b;
+        try{
+            b.pop();
+        } catch (std::range_error e ){
+            ASSERT_STREQ(e.what(), "Empty array");
+        }
+    }
+
+    TEST(TypedArray, Pop_front_Empty) {
+        TypedArray<Point> b;
+        try{
+            b.pop_front();
+        } catch (std::range_error e ){
+            ASSERT_STREQ(e.what(), "Empty array");
+        }
+    }
+
+    // TEST(TypedArray, pop) {
     //     TypedArray<Point> b;
-    //     b.set(0, Point(1,2,3));
-    //     b.set(1, Point(2,3,4));
-    //     b.set(20, Point(3,4,5));
-    //     EXPECT_EQ(b.get(0).x, 1);
-    //     EXPECT_EQ(b.get(1).y, 3);
-    //     EXPECT_EQ(b.get(20).z, 5);
+    //     b.push(Point(1,2, 0));
+    //     b.push(Point(2,3, 0));
+    //     b.push(Point(3,4, 0));
+    //     EXPECT_EQ(b.pop().x, 3);
+    //     EXPECT_EQ(b.pop().x, 2);
+    //     EXPECT_EQ(b.pop().x, 1);
     // }
 
-    // TEST(TypedArray, Defaults) {
-    //     TypedArray<Point> x;
-    //     Point& y = x.get(3);
-    //     std::cout << x << "\n";
-    //     EXPECT_DOUBLE_EQ(y.magnitude(), 0.0);
+    // TEST(TypedArray, push_front) {
+    //     TypedArray<Point> b;
+    //     b.push_front(Point(1,2, 0));
+    //     b.push_front(Point(2,3, 0));
+    //     b.push_front(Point(3,4, 0));
+    //     EXPECT_EQ(b.pop().x, 1);
+    //     EXPECT_EQ(b.pop().x, 2);
+    //     EXPECT_EQ(b.pop().x, 3);
     // }
+
+    // TEST(TypedArray, pop_front) {
+    //     TypedArray<Complex> b;
+    //     b.push_front(Complex(1,2));
+    //     b.push_front(Complex(2,3));
+    //     b.push_front(Complex(3,4));
+    //     EXPECT_EQ(b.pop_front().re(), 3);
+    //     EXPECT_EQ(b.pop_front().re(), 2);
+    //     EXPECT_EQ(b.pop_front().re(), 1);
+    // }
+
+
+    // TEST(TypedArray, Construction) {
+    //     TypedArray<Complex> b;
+    //     b.set(0, Complex(1,2));
+    //     b.set(1, Complex(2,3));
+    //     b.set(20, Complex(3,4));
+    //     EXPECT_EQ(b.get(0).re(), 1);
+    //     EXPECT_EQ(b.get(1).re(), 2);
+    //     EXPECT_EQ(b.get(20).re(), 3);
+    // }
+
+    TEST(TypedArray, Defaults) {
+        TypedArray<Complex> x;
+        Complex& y = x.get(3);
+        EXPECT_DOUBLE_EQ(y.magnitude(), 0.0);
+    }
 
     TEST(TypedArray, Matrix) {
 

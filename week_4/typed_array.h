@@ -12,6 +12,7 @@ public:
 
     TypedArray();
     TypedArray(const TypedArray& other);
+    TypedArray(const TypedArray& other, const int length);
 
     // Copy constructor
     TypedArray& operator=(const TypedArray& other);
@@ -23,9 +24,18 @@ public:
     ElementType &get(int index);
     ElementType &safe_get(int index) const;
     int size() const;
+    //make sure to add size testing on these methods
+    ElementType &pop();
+    ElementType &pop_front();
+
+    int getcapacity() const;
+    int getorigin() const;
+    int getend() const;
 
     // Setters
     void set(int index, ElementType value);
+    void push(ElementType value);
+    void push_front(ElementType value);
 
 private:
 
@@ -43,6 +53,36 @@ private:
     void extend_buffer(void);    
 
 };
+
+template <typename ElementType>
+int TypedArray<ElementType>::getcapacity() const {
+    return this->capacity;
+}
+
+template <typename ElementType>
+int TypedArray<ElementType>::getorigin() const {
+    return this->origin;
+}
+
+template <typename ElementType>
+int TypedArray<ElementType>::getend() const {
+    return this->end;
+}
+
+
+
+
+template <typename ElementType>
+TypedArray<ElementType>::TypedArray(const TypedArray& other, const int length) {
+    buffer = new ElementType[INITIAL_CAPACITY]();
+    capacity = INITIAL_CAPACITY;    
+    origin = capacity / 2;
+    end = origin;
+    for (int i = 0; i < length; i++) {
+        set(i, other.get(i));
+    }
+    destory(other);
+}
 
 template <typename ElementType>
 TypedArray<ElementType>::TypedArray() {
@@ -107,6 +147,29 @@ int TypedArray<ElementType>::size() const {
     return end - origin;
 }
 
+template <typename ElementType>
+ElementType& TypedArray<ElementType>::pop() {
+    if (size() == 0) {
+        throw std::range_error("Empty array");
+    }
+    ElementType &value = get(size()-1);
+    end--;
+    //need to figure out how to delete it after
+    return value;
+}
+
+template <typename ElementType>
+ElementType &TypedArray<ElementType>::pop_front() {
+    if (size() == 0) {
+        throw std::range_error("Empty array");
+    }
+    ElementType& e = get(0);
+    //need to figure out how to delete it after
+    origin++;
+    return e;
+}
+
+
 // Setters
 template <typename ElementType>
 void TypedArray<ElementType>::set(int index, ElementType value) {
@@ -121,6 +184,29 @@ void TypedArray<ElementType>::set(int index, ElementType value) {
     if ( index >= size() ) {
         end = index_to_offset(index+1);
     }
+}
+
+template <typename ElementType>
+void TypedArray<ElementType>::push(ElementType value) {
+    if (size() == this->capacity) {
+        extend_buffer();
+    }
+    set(size(), value);
+}
+
+template <typename ElementType>
+void TypedArray<ElementType>::push_front(ElementType value) {
+    // assert(da->buffer != NULL);
+    // while ( da->origin == 0 ) {
+    //     extend_buffer(da);
+    // }
+    // da->origin--;
+    
+    while (this->origin == 0) {
+        this->extend_buffer();
+    }
+    this->origin--;
+    set(0, value);
 }
 
 template <typename ElementType>

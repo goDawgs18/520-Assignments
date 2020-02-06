@@ -7,6 +7,7 @@ class Complex {
     public:
     Complex(double x, double y) : rl(x), img(y) {}
     Complex(double a) : rl(a), img(0) {};
+    Complex() : rl(0), img(0) {};
 
     double magnitude() const;
 
