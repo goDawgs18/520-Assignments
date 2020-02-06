@@ -12,6 +12,36 @@ namespace {
 //           These are  tests for the TypedArray data type              // 
 //**********************************************************************//
 
+    TEST(TypedArray, reverse_odd) {
+        TypedArray<Point> b;
+        b.push(Point(1,2,3));
+        b.push(Point(2,3,4));
+        b.push(Point(3,4,5));
+        std::cout << b << "\n"; 
+        b.reverse();
+        std::cout << b << "\n"; 
+        EXPECT_EQ(b.pop().x, 1);
+        EXPECT_EQ(b.pop().x, 2);
+        EXPECT_EQ(b.pop().x, 3);
+        std::cout << b << "\n"; 
+    }
+
+    TEST(TypedArray, reverse_even) {
+        TypedArray<Point> b;
+        b.push(Point(1,2,3));
+        b.push(Point(2,3,4));
+        b.push(Point(3,4,5));
+        b.push(Point(4,4,5));
+        std::cout << b << "\n"; 
+        b.reverse();
+        std::cout << b << "\n"; 
+        EXPECT_EQ(b.pop().x, 1);
+        EXPECT_EQ(b.pop().x, 2);
+        EXPECT_EQ(b.pop().x, 3);
+        EXPECT_EQ(b.pop().x, 4);
+        std::cout << b << "\n"; 
+    }
+
     TEST(TypedArray, Construction) {
         TypedArray<Point> b;
         b.set(0, Point(1,2,3));
@@ -75,6 +105,45 @@ namespace {
         }
     }
 
+    TEST(TypedArray, concat) {
+        TypedArray<int> a;
+        a.set(0,0);
+        a.set(1,1);
+        TypedArray<int> b = a.concat(a).concat(a);
+        std::cout << "b = "<< b << "\n"; 
+        EXPECT_EQ(b.pop_front(), 0);
+        EXPECT_EQ(b.pop_front(), 1);
+        EXPECT_EQ(b.pop_front(), 0);
+        EXPECT_EQ(b.pop_front(), 1);
+        EXPECT_EQ(b.pop_front(), 0);
+        EXPECT_EQ(b.pop_front(), 1);
+        std::cout << "a = "<< a << "\n"; 
+        EXPECT_EQ(a.pop_front(), 0);
+        EXPECT_EQ(a.pop_front(), 1);
+    }
+
+    TEST(TypedArray, addingOn) {
+        TypedArray<int> a;
+        a.set(0,0);
+        a.set(1,1);
+        TypedArray<int> b = a + a + a;
+        std::cout << "b = "<< b << "\n"; 
+        EXPECT_EQ(b.pop_front(), 0);
+        EXPECT_EQ(b.pop_front(), 1);
+        EXPECT_EQ(b.pop_front(), 0);
+        EXPECT_EQ(b.pop_front(), 1);
+        EXPECT_EQ(b.pop_front(), 0);
+        EXPECT_EQ(b.pop_front(), 1);
+        std::cout << "a = "<< a << "\n"; 
+        EXPECT_EQ(a.pop_front(), 0);
+        EXPECT_EQ(a.pop_front(), 1);
+    }
+
+    TEST(TypedArray, concat_empty) {
+        TypedArray<int> a;
+        TypedArray<int> b = a.concat(a).concat(a);
+    }
+
     // TEST(TypedArray, pop) {
     //     TypedArray<Point> b;
     //     b.push(Point(1,2, 0));
@@ -85,42 +154,6 @@ namespace {
     //     EXPECT_EQ(b.pop().x, 1);
     // }
 
-    // TEST(TypedArray, push_front) {
-    //     TypedArray<Point> b;
-    //     b.push_front(Point(1,2, 0));
-    //     b.push_front(Point(2,3, 0));
-    //     b.push_front(Point(3,4, 0));
-    //     EXPECT_EQ(b.pop().x, 1);
-    //     EXPECT_EQ(b.pop().x, 2);
-    //     EXPECT_EQ(b.pop().x, 3);
-    // }
-
-    // TEST(TypedArray, pop_front) {
-    //     TypedArray<Complex> b;
-    //     b.push_front(Complex(1,2));
-    //     b.push_front(Complex(2,3));
-    //     b.push_front(Complex(3,4));
-    //     EXPECT_EQ(b.pop_front().re(), 3);
-    //     EXPECT_EQ(b.pop_front().re(), 2);
-    //     EXPECT_EQ(b.pop_front().re(), 1);
-    // }
-
-
-    // TEST(TypedArray, Construction) {
-    //     TypedArray<Complex> b;
-    //     b.set(0, Complex(1,2));
-    //     b.set(1, Complex(2,3));
-    //     b.set(20, Complex(3,4));
-    //     EXPECT_EQ(b.get(0).re(), 1);
-    //     EXPECT_EQ(b.get(1).re(), 2);
-    //     EXPECT_EQ(b.get(20).re(), 3);
-    // }
-
-    TEST(TypedArray, Defaults) {
-        TypedArray<Complex> x;
-        Complex& y = x.get(3);
-        EXPECT_DOUBLE_EQ(y.magnitude(), 0.0);
-    }
 
     TEST(TypedArray, Matrix) {
 
@@ -142,13 +175,13 @@ namespace {
 
     }
 
-    // TEST(TypedArray,CopyElementsInSet1) {
-    //     TypedArray<Point> b;
-    //     Point p(1,2,3);
-    //     b.set(0, p);
-    //     p.x = 4;
-    //     EXPECT_DOUBLE_EQ(b.get(0).x, 1);
-    // }
+    TEST(TypedArray,CopyElementsInSet1) {
+        TypedArray<Point> b;
+        Point p(1,2,3);
+        b.set(0, p);
+        p.x = 4;
+        EXPECT_DOUBLE_EQ(b.get(0).x, 1);
+    }
 
     TEST(TypedArray,CopyElementsInSet2) {
         TypedArray<TypedArray<double>> m;

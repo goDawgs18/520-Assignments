@@ -27,6 +27,5 @@ Complex operator+(const Complex& a, const Complex& b);
 
 //Logical
 bool operator<(const Complex& a, const Complex& b);
-bool operator==(const Complex& a, const Complex& b);
 
 #endif

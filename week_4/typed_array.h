@@ -16,9 +16,16 @@ public:
 
     // Copy constructor
     TypedArray& operator=(const TypedArray& other);
+    TypedArray operator+(const TypedArray& other);
 
     // Destructor
     ~TypedArray();
+
+    //creators?
+    TypedArray concat(const TypedArray& other);
+
+    // Changers
+    TypedArray& reverse();
 
     // Getters
     ElementType &get(int index);
@@ -36,6 +43,8 @@ public:
     void set(int index, ElementType value);
     void push(ElementType value);
     void push_front(ElementType value);
+    
+
 
 private:
 
@@ -73,18 +82,6 @@ int TypedArray<ElementType>::getend() const {
 
 
 template <typename ElementType>
-TypedArray<ElementType>::TypedArray(const TypedArray& other, const int length) {
-    buffer = new ElementType[INITIAL_CAPACITY]();
-    capacity = INITIAL_CAPACITY;    
-    origin = capacity / 2;
-    end = origin;
-    for (int i = 0; i < length; i++) {
-        set(i, other.get(i));
-    }
-    destory(other);
-}
-
-template <typename ElementType>
 TypedArray<ElementType>::TypedArray() {
     buffer = new ElementType[INITIAL_CAPACITY]();
     capacity = INITIAL_CAPACITY;    
@@ -112,6 +109,24 @@ TypedArray<ElementType>& TypedArray<ElementType>::operator=(const TypedArray<Ele
         }
     }
     return *this;
+}
+
+template <typename ElementType>
+TypedArray<ElementType>& TypedArray<ElementType>::reverse() {
+    for (int i=0; i < size()/2; i++) {
+        ElementType t = get(i);
+        set(i, get(size() - 1 - i));
+        set(size() - 1 - i, t);
+    }
+
+    // delete[] *other;
+    return *this;
+
+}
+
+template <typename ElementType>
+TypedArray<ElementType> TypedArray<ElementType>::operator+(const TypedArray<ElementType>& other) {
+    return concat(other);
 }
 
 // Destructor
@@ -188,20 +203,11 @@ void TypedArray<ElementType>::set(int index, ElementType value) {
 
 template <typename ElementType>
 void TypedArray<ElementType>::push(ElementType value) {
-    if (size() == this->capacity) {
-        extend_buffer();
-    }
     set(size(), value);
 }
 
 template <typename ElementType>
 void TypedArray<ElementType>::push_front(ElementType value) {
-    // assert(da->buffer != NULL);
-    // while ( da->origin == 0 ) {
-    //     extend_buffer(da);
-    // }
-    // da->origin--;
-    
     while (this->origin == 0) {
         this->extend_buffer();
     }
@@ -222,6 +228,36 @@ std::ostream &operator<<(std::ostream &os, TypedArray<ElementType> &array)
     os << ']';
     return os;
 }
+
+// template <typename ElementType>
+// bool operator==(TypedArray<ElementType> &a, TypedArray<ElementType> &b) {
+//     if (a.size() != b.size) {
+//         return false;
+//     } else if (!std::is_same<a,b>) {
+//         return false;
+//     }
+//     for (int i=0; i<a.size(); i++ ) {
+//         if ( a.get(i) != b.get(i)) {
+//             return false;
+//         }
+//     }
+//     return true;
+// }
+
+// template <typename ElementType>
+// TypedArray<ElementType>& TypedArray<ElementType>::operator=(const TypedArray<ElementType>& other) {
+template <typename ElementType>
+TypedArray<ElementType> TypedArray<ElementType>::concat( const TypedArray& other ) {
+    TypedArray<ElementType> a;
+    a = *this;
+    
+    for (int i = 0; i < other.size(); i++) {
+        a.push(other.safe_get(i));
+    }
+
+    return a;
+}
+
 
 // Private methods
 
