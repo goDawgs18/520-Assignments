@@ -32,6 +32,12 @@ class DB {
     // custom name n, will just be a number because it doesn't say that isn't okay
     // mass should vary from 0.01 to 1000 and the distance from 0.1 to 10,000,000.
     DB &create_test_data(int n);
+
+    int size() const;
+
+    double accumulate(function<double(const Row)> f) const;
+    double average_mass() const;
+    double average_distance() const;
   private:
 
     typedef tuple<string,double,double> Value;

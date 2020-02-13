@@ -3,6 +3,64 @@
 
 namespace {
 
+  TEST(DB, avg_dist) {
+    DB db;
+
+    db.insert("earth", 6, 3)            
+      .insert("mars", 2, 3)
+      .insert("moon", 3, 3)
+      .insert("exoplanet one", 4, 3)
+      .insert("jupiter", 5, 3);
+
+    double average_distance = db.average_distance();
+
+    ASSERT_EQ(average_distance, 3.0);        
+  }
+
+  TEST(DB, avg_mass) {
+    DB db;
+
+    db.insert("earth", 1, 1)            
+      .insert("mars", 2, 1.524)
+      .insert("moon", 3, 1)
+      .insert("exoplanet one", 4, 1054.4)
+      .insert("jupiter", 5, 5.2);
+
+    double average_mass = db.average_mass();
+
+    ASSERT_EQ(average_mass, 3.0);        
+  }
+
+  TEST(DB, accumulate) {
+    DB db;
+
+    db.insert("earth", 1, 1)            
+      .insert("mars", 2, 1.524)
+      .insert("moon", 3, 1)
+      .insert("exoplanet one", 4, 1054.4)
+      .insert("jupiter", 5, 5.2);
+
+    double total_mass = db.accumulate([](DB::Row row) { return MASS(row); });
+
+    ASSERT_EQ(total_mass, 15.0);        
+  }
+  
+  TEST(DB, size) {
+    DB db;
+
+    db.insert("earth", 1, 1)            
+      .insert("mars", 0.11, 1.524)
+      .insert("moon", 0.012, 1)
+      .insert("exoplanet one", 1, 1054.4)
+      .insert("jupiter", 318, 5.2);
+    
+    ASSERT_EQ(db.size(), 5);
+    db.drop(0);
+    ASSERT_EQ(db.size(), 4);
+        
+  }
+
+
   TEST(DB, create_test_data) {
     DB db;
 
