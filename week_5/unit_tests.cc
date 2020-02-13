@@ -1,12 +1,110 @@
 #include "gtest/gtest.h"
+#include "examples.h"
 #include <iostream>
 #include <vector>
 #include <cctype>
 #include <numeric>      // std::accumulate
 
+namespace{
+  
+  TEST(Examples,Twins) {
+    std::vector<int> x = {2,3,5,7,11,13,17,23};
+    std::cout << "Expectation Start: \n";
+    std::cout << "[(3,5),(5,7),(11,13)]";
+    std::cout << "\nExpectation END";
+    std::cout << "\n";
+    std::cout << "Results start: \n";
+    std::vector<std::tuple<int, int>> a = twins(x);
+    for (int i = 0; i < a.size(); i++) {
+      std::cout << "(" << std::get<0>(a[i]) << ", " << std::get<1>(a[i]) << "),";
+      // std::cout << a[i] << ", ";
+    }
+    std::cout << "\nResults end";
+    std::cout << "\n";
+  }
+
+  TEST(Examples,primes_1) {
+    std::vector<int> a = primes(0);
+    std::cout << "Expectation Start: \n";
+    std::cout << "";
+    std::cout << "\nExpectation END";
+    std::cout << "\n";
+    std::cout << "Results start: \n";
+    for (int i = 0; i < a.size(); i++) {
+      std::cout << a[i] << ", ";
+    }
+    std::cout << "\nResults end";
+    std::cout << "\n";
+  }
+
+  TEST(Examples,primes_0) {
+    std::vector<int> a = primes(1);
+    std::cout << "Expectation Start: \n";
+    std::cout << "";
+    std::cout << "\nExpectation END";
+    std::cout << "\n";
+    std::cout << "Results start: \n";
+    for (int i = 0; i < a.size(); i++) {
+      std::cout << a[i] << ", ";
+    }
+    std::cout << "\nResults end";
+    std::cout << "\n";
+  }
+
+  TEST(Examples,primes_excluding19) {
+    std::vector<int> a = primes(360);
+    std::cout << "Expectation Start: \n";
+    std::cout << "2, 3, 5, 7, 11, 13, 17, 19";
+    std::cout << "\nExpectation END";
+    std::cout << "\n";
+    std::cout << "Results start: \n";
+    for (int i = 0; i < a.size(); i++) {
+      std::cout << a[i] << ", ";
+    }
+    std::cout << "\nResults end";
+    std::cout << "\n";
+  }
+
+  TEST(Examples,primes_including19) {
+    std::vector<int> a = primes(361);
+    std::cout << "Expectation Start: \n";
+    std::cout << "2, 3, 5, 7, 11, 13, 17, 19";
+    std::cout << "\nExpectation END";
+    std::cout << "\n";
+    std::cout << "Results start: \n";
+    for (int i = 0; i < a.size(); i++) {
+      std::cout << a[i] << ", ";
+    }
+    std::cout << "\nResults end";
+    std::cout << "\n";
+  }
+
+  TEST(Examples,sort_by_magnitude) {
+    std::vector<double> a = {1.0, 2.0, -3.0, 4.0};
+    sort_by_magnitude(a);
+    std::cout << "start \n";
+    for (int i = 0; i < a.size(); i++) {
+      std::cout << a[i];
+    }
+    std::cout << "\nend";
+  }
+
+  TEST(Examples,sort_by_magnitude_2) {
+    std::vector<double> a = {1.0, 2.0, 4.0, -3.0};
+    sort_by_magnitude(a);
+    std::cout << "start \n";
+    for (int i = 0; i < a.size(); i++) {
+      std::cout << a[i];
+    }
+    std::cout << "\nend";
+  }
+
+}
+
 namespace {
 
   using namespace std;
+
 
   class Imag {
       public: 
