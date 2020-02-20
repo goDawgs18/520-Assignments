@@ -1,7 +1,14 @@
 #include "db.h"
 #include "gtest/gtest.h"
-
+#include <chrono>
 namespace {
+
+  TEST(DB, no_tests_here) {
+    auto t1 = std::chrono::high_resolution_clock::now();
+    std::cout<< "printingForFun";
+    auto t2 = std::chrono::high_resolution_clock::now();
+    std::cout<<std::to_string(t2-t1);
+  }
 
   TEST(DB, avg_dist) {
     DB db;
